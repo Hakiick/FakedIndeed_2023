@@ -7,7 +7,7 @@
 - **Objectif** : Rebuild job board mobile-first sécurisé pour portfolio
 
 ## US Courante
-- **US** : (en attente — prochaine : US-04)
+- **US** : (en attente — prochaine : US-05)
 - **Branche** : —
 - **Statut** : —
 - **Équipe** : —
@@ -40,6 +40,7 @@
 - 2026-02-19 : US-01 DONE — Migration TS strict, bcrypt, Zod, design tokens, Vitest. 9 commits, 82 fichiers.
 - 2026-02-19 : US-02 DONE — JWT auth, 7 composants UI, 3 hooks, middleware. 12 commits, 37 fichiers.
 - 2026-02-19 : US-03 DONE — Layout dual, MobileNav, DesktopNav, SearchBar, Footer. 6 commits, 9 fichiers.
+- 2026-02-19 : US-04 DONE — JobCard WOW, filtres bottom sheet, pagination, hero homepage. 9 commits, 18 fichiers.
 
 ## US Terminées
 - **US-01** (2026-02-19) : Setup TypeScript + cleanup + sécurité de base
@@ -59,4 +60,12 @@
   - SearchBar (input rounded-full, icône, 44px height)
   - Footer responsive (3 cols desktop, 1 col mobile, mb-16 mobile pour MobileNav)
   - Suppression 4 anciens composants nav (Navbar, Sidebar, AuthButtons, LogoutButtons)
+  - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
+- **US-04** (2026-02-19) : Liste des offres mobile-first — WOW feature
+  - JobCard avec badges colorés, stagger animations, hover effects, salary formatting
+  - JobFilters : desktop inline bar + mobile bottom sheet modal, 5 critères de filtrage
+  - JobList : grille responsive (1/2/3 cols), skeleton loading anatomique, empty state
+  - Page /jobs : SearchBar fonctionnelle, filtres, pagination avec ellipsis
+  - Homepage redesignée : hero gradient, feature pills, 6 offres preview
+  - Suppression legacy Job.tsx + JobList.tsx, ESLint config ajoutée
   - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
