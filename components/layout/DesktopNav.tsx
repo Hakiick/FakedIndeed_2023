@@ -59,7 +59,7 @@ export default function DesktopNav() {
         {/* Post a Job — company ou admin */}
         {(userType === 'company' || userType === 'admin') && (
           <Link
-            href="/addAd"
+            href="/jobs/new"
             className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-50 min-h-[44px] transition-colors duration-200"
           >
             Post a Job

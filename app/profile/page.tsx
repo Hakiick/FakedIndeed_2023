@@ -231,7 +231,7 @@ export default function ProfilePage() {
                   ({jobs.length})
                 </span>
               </h2>
-              <Link href="/addAd">
+              <Link href="/jobs/new">
                 <Button variant="primary" size="sm">
                   + Nouvelle offre
                 </Button>
@@ -262,7 +262,7 @@ export default function ProfilePage() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Link href={`/editAd/${job.id}`} aria-label={`Modifier l'offre ${job.title}`}>
+                      <Link href={`/jobs/${job.id}/edit`} aria-label={`Modifier l'offre ${job.title}`}>
                         <Button variant="ghost" size="sm" leftIcon={<HiPencil size={14} aria-hidden="true" />}>
                           Modifier
                         </Button>
