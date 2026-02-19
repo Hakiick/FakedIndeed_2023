@@ -49,7 +49,7 @@ function SingleToast({ toast, onRemove }: SingleToastProps) {
       aria-live="assertive"
       className={[
         'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg',
-        'animate-[slideUp_0.25s_ease-out]',
+        'animate-[toastSlideUp_0.25s_ease-out]',
         toastStyles[toast.type],
       ].join(' ')}
     >
@@ -89,12 +89,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <SingleToast key={toast.id} toast={toast} onRemove={removeToast} />
         ))}
       </div>
-      <style>{`
-        @keyframes slideUp {
-          from { transform: translateY(1rem); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-      `}</style>
     </ToastContext.Provider>
   );
 }

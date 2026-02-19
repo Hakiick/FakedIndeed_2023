@@ -36,6 +36,18 @@
   }
 }
 
+/* Slide up subtle (pour les toasts / banners du bas) */
+@keyframes toastSlideUp {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Slide down (pour les banners) */
 @keyframes slideDown {
   from {
