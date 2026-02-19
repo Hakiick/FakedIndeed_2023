@@ -1,0 +1,265 @@
+diff --git a/public/images/projects/timemanager/README.md b/public/images/projects/timemanager/README.md
+new file mode 100644
+index 0000000..0082604
+--- /dev/null
++++ b/public/images/projects/timemanager/README.md
+@@ -0,0 +1,15 @@
++# TimeManager Screenshots
++
++Place the following screenshots here (captured from the deployed app):
++
++1. `dashboard.webp` — Dashboard employee with stat cards and weekly charts
++2. `clock.webp` — Clock in/out widget with radial SVG animation
++3. `team.webp` — Team management view with avatar grid
++4. `mobile.webp` — Mobile responsive view (375px viewport)
++
++## Capture instructions
++
++- Format: WebP (preferred) or PNG
++- Recommended size: 800x450px or 16:9 ratio
++- Capture from both mobile and desktop viewports
++- Include real or demo data for best visual impact
+diff --git a/src/components/projects/Projects.tsx b/src/components/projects/Projects.tsx
+index 71da74f..5564d9f 100644
+--- a/src/components/projects/Projects.tsx
++++ b/src/components/projects/Projects.tsx
+@@ -18,6 +18,7 @@ const FILTERS: FilterConfig[] = [
+   { label: "projects.filter.cyber", categories: ["cyber", "ia-cyber"] },
+   { label: "projects.filter.devops", categories: ["devops"] },
+   { label: "projects.filter.iot", categories: ["cloud-iot"] },
++  { label: "projects.filter.web", categories: ["fullstack"] },
+ ];
+ 
+ function filterProjects(categories: ProjectCategory[] | null) {
+diff --git a/src/components/ui/ClassifiedCard.tsx b/src/components/ui/ClassifiedCard.tsx
+index f16ca4b..b4e8827 100644
+--- a/src/components/ui/ClassifiedCard.tsx
++++ b/src/components/ui/ClassifiedCard.tsx
+@@ -1,9 +1,135 @@
+-import { useState, useEffect, useRef, useCallback } from "react";
++import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+ import type { Project } from "../../data/projects";
+ import { cn } from "../../lib/utils";
+ import { DecryptText } from "./DecryptText";
+ import { useLanguage } from "../../lib/useLanguage";
+ 
++function ScreenshotGallery({ screenshots }: { screenshots: string[] }) {
++  const [activeIndex, setActiveIndex] = useState(0);
++  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
++
++  const validScreenshots = useMemo(
++    () => screenshots.filter((_, i) => !imageErrors.has(i)),
++    [screenshots, imageErrors],
++  );
++
++  if (validScreenshots.length === 0) return null;
++
++  const handlePrev = (e: React.MouseEvent) => {
++    e.stopPropagation();
++    setActiveIndex((prev) =>
++      prev <= 0 ? validScreenshots.length - 1 : prev - 1,
++    );
++  };
++
++  const handleNext = (e: React.MouseEvent) => {
++    e.stopPropagation();
++    setActiveIndex((prev) =>
++      prev >= validScreenshots.length - 1 ? 0 : prev + 1,
++    );
++  };
++
++  const handleImageError = (originalIndex: number) => {
++    setImageErrors((prev) => {
++      const updated = new Set(prev);
++      updated.add(originalIndex);
++      return updated;
++    });
++  };
++
++  return (
++    <div className="mb-4">
++      {/* Main image */}
++      <div
++        className="relative mb-2 overflow-hidden rounded border"
++        style={{ borderColor: "var(--cyber-border)" }}
++      >
++        <img
++          src={validScreenshots[activeIndex]}
++          alt={`Screenshot ${activeIndex + 1}`}
++          loading="lazy"
++          onError={() => {
++            const origIndex = screenshots.indexOf(
++              validScreenshots[activeIndex],
++            );
++            handleImageError(origIndex);
++          }}
++          className="h-auto w-full object-cover"
++          style={{ maxHeight: "280px" }}
++        />
++        {/* Navigation arrows */}
++        {validScreenshots.length > 1 && (
++          <>
++            <button
++              type="button"
++              onClick={handlePrev}
++              aria-label="Previous screenshot"
++              className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border font-mono text-sm transition-opacity hover:opacity-100"
++              style={{
++                backgroundColor: "rgba(10, 10, 15, 0.8)",
++                borderColor: "var(--cyber-accent-green)",
++                color: "var(--cyber-accent-green)",
++                opacity: 0.7,
++              }}
++            >
++              &lt;
++            </button>
++            <button
++              type="button"
++              onClick={handleNext}
++              aria-label="Next screenshot"
++              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border font-mono text-sm transition-opacity hover:opacity-100"
++              style={{
++                backgroundColor: "rgba(10, 10, 15, 0.8)",
++                borderColor: "var(--cyber-accent-green)",
++                color: "var(--cyber-accent-green)",
++                opacity: 0.7,
++              }}
++            >
++              &gt;
++            </button>
++          </>
++        )}
++        {/* Counter */}
++        <span
++          className="absolute bottom-2 right-2 rounded px-2 py-0.5 font-mono text-xs"
++          style={{
++            backgroundColor: "rgba(10, 10, 15, 0.8)",
++            color: "var(--cyber-text-secondary)",
++          }}
++        >
++          {activeIndex + 1}/{validScreenshots.length}
++        </span>
++      </div>
++      {/* Thumbnail dots */}
++      {validScreenshots.length > 1 && (
++        <div className="flex justify-center gap-1.5">
++          {validScreenshots.map((_, i) => (
++            <button
++              key={i}
++              type="button"
++              onClick={(e) => {
++                e.stopPropagation();
++                setActiveIndex(i);
++              }}
++              aria-label={`Go to screenshot ${i + 1}`}
++              className="h-1.5 rounded-full transition-all duration-200"
++              style={{
++                width: i === activeIndex ? "1.5rem" : "0.375rem",
++                backgroundColor:
++                  i === activeIndex
++                    ? "var(--cyber-accent-green)"
++                    : "var(--cyber-text-secondary)",
++                opacity: i === activeIndex ? 1 : 0.4,
++              }}
++            />
++          ))}
++        </div>
++      )}
++    </div>
++  );
++}
++
+ export interface ClassifiedCardProps {
+   project: Project;
+   index: number;
+@@ -235,11 +361,16 @@ export function ClassifiedCard({
+           <div
+             className="transition-all duration-300 ease-in-out"
+             style={{
+-              maxHeight: isExpanded ? "600px" : "0px",
++              maxHeight: isExpanded ? "900px" : "0px",
+               opacity: isExpanded ? 1 : 0,
+               overflow: "hidden",
+             }}
+           >
++            {/* Screenshots gallery */}
++            {project.screenshots && project.screenshots.length > 0 && (
++              <ScreenshotGallery screenshots={project.screenshots} />
++            )}
++
+             {/* Description */}
+             <p
+               className="mb-4 text-sm leading-relaxed"
+diff --git a/src/data/projects.ts b/src/data/projects.ts
+index 5dcea7f..2b517a8 100644
+--- a/src/data/projects.ts
++++ b/src/data/projects.ts
+@@ -4,7 +4,8 @@ export type ProjectCategory =
+   | "ia-cyber"
+   | "cloud-iot"
+   | "devops"
+-  | "ia-meta";
++  | "ia-meta"
++  | "fullstack";
+ export type ProjectStatus = "completed" | "in-progress";
+ 
+ export interface Project {
+@@ -17,6 +18,7 @@ export interface Project {
+   categorie: ProjectCategory;
+   status: ProjectStatus;
+   github: string;
++  screenshots?: string[];
+ }
+ 
+ export const projects: Project[] = [
+@@ -117,4 +119,30 @@ export const projects: Project[] = [
+     status: "in-progress",
+     github: "https://github.com/juninhomax/Portfolio_cyber_ia",
+   },
++  {
++    id: "timemanager",
++    titre: "TimeManager — Gestion du temps de travail",
++    titreEn: "TimeManager — Work Time Management",
++    description:
++      "Application full-stack de gestion des heures de travail : clock in/out, gestion d'équipes, suivi des heures supplémentaires, dashboard admin. Backend Elixir/Phoenix + PostgreSQL, frontend Vue 3 rebuild mobile-first avec animations fluides, PWA offline-first et design responsive. Projet Epitech T-POO-700 avec 275+ commits.",
++    descriptionEn:
++      "Full-stack work time management application: clock in/out, team management, overtime tracking, admin dashboard. Elixir/Phoenix + PostgreSQL backend, Vue 3 frontend rebuilt mobile-first with smooth animations, offline-first PWA and responsive design. Epitech T-POO-700 project with 275+ commits.",
++    stack: [
++      "Vue 3",
++      "TypeScript",
++      "Elixir/Phoenix",
++      "PostgreSQL",
++      "Tailwind CSS",
++      "PWA",
++    ],
++    categorie: "fullstack",
++    status: "completed",
++    github: "https://github.com/Hakiick/T-POO-700-STG_1",
++    screenshots: [
++      "/images/projects/timemanager/dashboard.webp",
++      "/images/projects/timemanager/clock.webp",
++      "/images/projects/timemanager/team.webp",
++      "/images/projects/timemanager/mobile.webp",
++    ],
++  },
+ ];
+diff --git a/src/lib/i18n.ts b/src/lib/i18n.ts
+index 81a2583..68544d5 100644
+--- a/src/lib/i18n.ts
++++ b/src/lib/i18n.ts
+@@ -85,6 +85,7 @@ export const translations: Record<Language, Record<string, string>> = {
+     "projects.filter.cyber": "Cyber",
+     "projects.filter.devops": "DevOps",
+     "projects.filter.iot": "IoT",
++    "projects.filter.web": "Web",
+     "projects.status.completed": "Complété",
+     "projects.status.in-progress": "En cours",
+ 
+@@ -209,6 +210,7 @@ export const translations: Record<Language, Record<string, string>> = {
+     "projects.filter.cyber": "Cyber",
+     "projects.filter.devops": "DevOps",
+     "projects.filter.iot": "IoT",
++    "projects.filter.web": "Web",
+     "projects.status.completed": "Completed",
+     "projects.status.in-progress": "In progress",
+ 

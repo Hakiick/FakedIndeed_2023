@@ -1,7 +1,6 @@
 'use client';
 
 import ApplyForm from './applyFrom';
-import Job from '../components/jobs/Job';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import type { User } from '@/types/user';
@@ -65,14 +64,8 @@ export default function ApplyJob() {
       website: null,
     };
     return (
-      <main className="lg:flex">
-        <p>&#8206;</p>
-        <div className="lg:max-w-2xl mx-4 p-2 flex-1">
-          <ApplyForm user={userEmpty} />
-        </div>
-        <div className="max-w-6xl overflow-y-auto h-screen mx-4 p-2 flex-1">
-          <Job />
-        </div>
+      <main className="py-6 max-w-2xl mx-auto">
+        <ApplyForm user={userEmpty} />
       </main>
     );
   }
@@ -86,13 +79,8 @@ export default function ApplyJob() {
   };
 
   return (
-    <main className="lg:flex">
-      <div className="lg:max-w-2xl mx-4 p-2 flex-1">
-        <ApplyForm user={applyUser} />
-      </div>
-      <div className="max-w-6xl overflow-y-auto h-screen mx-4 p-2 flex-1">
-        <Job />
-      </div>
+    <main className="py-6 max-w-2xl mx-auto">
+      <ApplyForm user={applyUser} />
     </main>
   );
 }

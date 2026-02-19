@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { FaEnvelope, FaGlobe, FaPhone } from 'react-icons/fa';
-import JobList from '../components/jobs/JobList';
 import type { Application } from '@/types/application';
 
 interface CompanyOption {
@@ -184,7 +183,12 @@ export default function Applicants() {
           })}
         </div>
         <div className="lg:max-w-2xl overflow-y-auto h-screen mx-4 p-2 flex-1">
-          <JobList selectedCompany={company} />
+          <p className="text-sm text-gray-500 mt-4">
+            Voir les offres sur{' '}
+            <a href="/jobs" className="text-[#2557a7] underline">
+              la page des offres
+            </a>
+          </p>
         </div>
       </div>
     </div>
