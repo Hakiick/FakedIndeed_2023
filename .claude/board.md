@@ -7,7 +7,7 @@
 - **Objectif** : Rebuild job board mobile-first sécurisé pour portfolio
 
 ## US Courante
-- **US** : (en attente — prochaine : US-03)
+- **US** : (en attente — prochaine : US-04)
 - **Branche** : —
 - **Statut** : —
 - **Équipe** : —
@@ -39,6 +39,7 @@
 - 2026-02-19 : Init-project — Brainstorm validé, 10 US créées, agents configurés, rules générées
 - 2026-02-19 : US-01 DONE — Migration TS strict, bcrypt, Zod, design tokens, Vitest. 9 commits, 82 fichiers.
 - 2026-02-19 : US-02 DONE — JWT auth, 7 composants UI, 3 hooks, middleware. 12 commits, 37 fichiers.
+- 2026-02-19 : US-03 DONE — Layout dual, MobileNav, DesktopNav, SearchBar, Footer. 6 commits, 9 fichiers.
 
 ## US Terminées
 - **US-01** (2026-02-19) : Setup TypeScript + cleanup + sécurité de base
@@ -52,3 +53,10 @@
   - 3 hooks : useMediaQuery, useBreakpoint, useAuth + AuthProvider
   - Migration de 10 fichiers de CookieUser → useAuth, suppression js-cookie
   - Agents : mobile-dev → stabilizer (fix 7 fichiers js-cookie restants) | 1 feedback | STABLE
+- **US-03** (2026-02-19) : Layout responsive + navigation mobile
+  - MobileNav bottom tab bar (4 onglets, icônes, safe-area-inset, touch 44px)
+  - DesktopNav sticky top (logo, SearchBar, liens role-aware, avatar dropdown)
+  - SearchBar (input rounded-full, icône, 44px height)
+  - Footer responsive (3 cols desktop, 1 col mobile, mb-16 mobile pour MobileNav)
+  - Suppression 4 anciens composants nav (Navbar, Sidebar, AuthButtons, LogoutButtons)
+  - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
