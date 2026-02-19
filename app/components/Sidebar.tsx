@@ -1,14 +1,19 @@
-"use client"
+'use client';
 
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
-import { FaBars, FaTimes, FaAngleRight } from "react-icons/fa"
+import { FaBars, FaTimes, FaAngleRight } from 'react-icons/fa';
 import Cookies from 'js-cookie';
+
+interface UserOption {
+  email: string;
+  userType: string;
+}
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useRef(null);
-  const [userType, setUserType] = useState(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [userType, setUserType] = useState<string | null>(null);
 
   const email = Cookies.get('CookieUser');
 
@@ -20,45 +25,44 @@ export default function Sidebar() {
     setIsOpen(false);
   };
 
-  const getUsers = async () => {
+  const getUsers = async (): Promise<UserOption[] | undefined> => {
     try {
-      const res = await fetch("http://localhost:3000/api/users", {
-        cache: "no-store",
+      const res = await fetch('/api/users', {
+        cache: 'no-store',
       });
-  
+
       if (!res.ok) {
-        throw new Error("Failed to fetch users");
+        throw new Error('Failed to fetch users');
       }
 
-      return res.json();
+      return res.json() as Promise<UserOption[]>;
     } catch (error) {
-      console.log("Error loading users: ", error);
+      return undefined;
     }
   };
 
   useEffect(() => {
     const fetchUsers = async () => {
-        try {
-            
-            const data = await getUsers();
-            const matchingUsers = data.find(item => item.email === email);
-            
-            if (matchingUsers) {
-              setUserType(matchingUsers.userType);
-            } else {
-            }
-        } catch (error) {
-            console.error("Error fetching ads: ", error);
+      try {
+        const data = await getUsers();
+        if (data) {
+          const matchingUser = data.find((item) => item.email === email);
+
+          if (matchingUser) {
+            setUserType(matchingUser.userType);
+          }
         }
+      } catch (error) {
+        // silently handle
+      }
     };
 
     fetchUsers();
   }, [email]);
 
-
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         closeSidebar();
       }
     };
@@ -92,7 +96,11 @@ export default function Sidebar() {
                 {userType !== null && (
                   <div>
                     <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/profile">
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/profile"
+                      >
                         Edit Profile
                         <FaAngleRight className="ml-4" />
                       </Link>
@@ -104,41 +112,23 @@ export default function Sidebar() {
                 {userType === 'company' && (
                   <div>
                     <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/addAd">
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/addAd"
+                      >
                         Post a Job Offer
                         <FaAngleRight className="ml-4" />
                       </Link>
                     </li>
                     <hr className="h-px my-2 bg-gray-200" />
                     <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/applicants">
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/applicants"
+                      >
                         Job Applicants
-                        <FaAngleRight className="ml-4" />
-                      </Link>
-                    </li>
-                    <hr className="h-px my-2 bg-gray-200" />
-                  </div>
-                )}
-  
-                {userType === 'admin' && (
-                  <div>
-                    <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/addAd">
-                        Post a Job Offer
-                        <FaAngleRight className="ml-4" />
-                      </Link>
-                    </li>
-                    <hr className="h-px my-2 bg-gray-200" />
-                    <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/applicants">
-                        Job Applicants
-                        <FaAngleRight className="ml-4" />
-                      </Link>
-                    </li>
-                    <hr className="h-px my-2 bg-gray-200" />
-                    <li>
-                      <Link onClick={closeSidebar} className="p-2 flex justify-between items-center hover:text-blue-900" href="/admin">
-                        Admin Page
                         <FaAngleRight className="ml-4" />
                       </Link>
                     </li>
@@ -146,6 +136,43 @@ export default function Sidebar() {
                   </div>
                 )}
 
+                {userType === 'admin' && (
+                  <div>
+                    <li>
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/addAd"
+                      >
+                        Post a Job Offer
+                        <FaAngleRight className="ml-4" />
+                      </Link>
+                    </li>
+                    <hr className="h-px my-2 bg-gray-200" />
+                    <li>
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/applicants"
+                      >
+                        Job Applicants
+                        <FaAngleRight className="ml-4" />
+                      </Link>
+                    </li>
+                    <hr className="h-px my-2 bg-gray-200" />
+                    <li>
+                      <Link
+                        onClick={closeSidebar}
+                        className="p-2 flex justify-between items-center hover:text-blue-900"
+                        href="/admin"
+                      >
+                        Admin Page
+                        <FaAngleRight className="ml-4" />
+                      </Link>
+                    </li>
+                    <hr className="h-px my-2 bg-gray-200" />
+                  </div>
+                )}
               </ul>
             </div>
           </div>
