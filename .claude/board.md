@@ -7,7 +7,7 @@
 - **Objectif** : Rebuild job board mobile-first sécurisé pour portfolio
 
 ## US Courante
-- **US** : (en attente — prochaine : US-05)
+- **US** : (en attente — prochaine : US-06)
 - **Branche** : —
 - **Statut** : —
 - **Équipe** : —
@@ -41,6 +41,7 @@
 - 2026-02-19 : US-02 DONE — JWT auth, 7 composants UI, 3 hooks, middleware. 12 commits, 37 fichiers.
 - 2026-02-19 : US-03 DONE — Layout dual, MobileNav, DesktopNav, SearchBar, Footer. 6 commits, 9 fichiers.
 - 2026-02-19 : US-04 DONE — JobCard WOW, filtres bottom sheet, pagination, hero homepage. 9 commits, 18 fichiers.
+- 2026-02-19 : US-05 DONE — Détail offre, ApplyForm Zod+CV upload, sticky apply mobile. 5 commits, 5 fichiers.
 
 ## US Terminées
 - **US-01** (2026-02-19) : Setup TypeScript + cleanup + sécurité de base
@@ -60,6 +61,12 @@
   - SearchBar (input rounded-full, icône, 44px height)
   - Footer responsive (3 cols desktop, 1 col mobile, mb-16 mobile pour MobileNav)
   - Suppression 4 anciens composants nav (Navbar, Sidebar, AuthButtons, LogoutButtons)
+  - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
+- **US-05** (2026-02-19) : Détail offre + postuler
+  - Page /jobs/[id] avec JobDetail (badges, salary, description, avantages, sticky apply mobile)
+  - ApplyForm : 7 champs, CV upload base64 5MB, Zod validation client, pre-fill useAuth
+  - API GET /api/ads/[id] pour fetch single job
+  - Skeleton loading, 404 handling, toast success/error
   - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
 - **US-04** (2026-02-19) : Liste des offres mobile-first — WOW feature
   - JobCard avec badges colorés, stagger animations, hover effects, salary formatting
