@@ -5,6 +5,8 @@ export const dynamic = 'force-dynamic';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import type { User } from '@/types/user';
+import { signToken } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -34,6 +36,23 @@ export async function POST(request: NextRequest) {
     if (!passwordMatch) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
+
+    const token = await signToken({
+      id: user.id,
+      email: user.email,
+      userType: user.userType,
+      name: user.name,
+      lastname: user.lastname,
+    });
+
+    const cookieStore = await cookies();
+    cookieStore.set('auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    });
 
     return NextResponse.json({
       success: true,
