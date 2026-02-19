@@ -1,12 +1,12 @@
-import './globals.css'
-import Navbar from './components/page/Navbar'
+import './globals.css';
+import Navbar from './components/page/Navbar';
 
 export const metadata = {
   title: 'FakedIndeed',
   description: 'Created by Fixari Lucas using Nextjs',
-}
+};
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
@@ -17,5 +17,5 @@ export default function RootLayout({ children }) {
         </div>
       </body>
     </html>
-  )
+  );
 }

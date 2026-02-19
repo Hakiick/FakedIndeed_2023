@@ -1,32 +1,33 @@
-"use client"
+'use client';
 
 import React, { useEffect, useState } from 'react';
+import type { Job } from '@/types/job';
 
-const getAds = async () => {
+const getAds = async (): Promise<Job[] | undefined> => {
   try {
-    const res = await fetch("http://localhost:3000/api/ads", {
-      cache: "no-store",
+    const res = await fetch('/api/ads', {
+      cache: 'no-store',
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch ads");
+      throw new Error('Failed to fetch ads');
     }
 
-    return res.json();
+    return res.json() as Promise<Job[]>;
   } catch (error) {
-    console.log("Error loading ads: ", error);
+    return undefined;
   }
 };
 
-export default function JobList() {
-  const [ads, setAds] = useState([]);
+export default function TestJobList() {
+  const [ads, setAds] = useState<Job[]>([]);
 
   useEffect(() => {
     async function fetchAds() {
       const data = await getAds();
 
       if (data && data.length) {
-        setAds(data.reverse());
+        setAds([...data].reverse());
       }
     }
 
