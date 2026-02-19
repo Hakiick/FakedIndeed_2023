@@ -13,6 +13,7 @@ export const metadata = {
   description: 'Created by Fixari Lucas using Nextjs',
   themeColor: '#2557a7',
   manifest: '/manifest.json',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default' as const,
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="FakedIndeed" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="preload" as="image" href="/fakedindeed.png" />
       </head>
       <body>
         <AuthProvider>
