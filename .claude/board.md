@@ -7,7 +7,7 @@
 - **Objectif** : Rebuild job board mobile-first sécurisé pour portfolio
 
 ## US Courante
-- **US** : (en attente)
+- **US** : (en attente — prochaine : US-02)
 - **Branche** : —
 - **Statut** : —
 - **Équipe** : —
@@ -37,6 +37,11 @@
 
 ## Journal
 - 2026-02-19 : Init-project — Brainstorm validé, 10 US créées, agents configurés, rules générées
+- 2026-02-19 : US-01 DONE — Migration TS strict, bcrypt, Zod, design tokens, Vitest. 9 commits, 82 fichiers.
 
 ## US Terminées
-(vide)
+- **US-01** (2026-02-19) : Setup TypeScript + cleanup + sécurité de base
+  - Migration JS → TS strict (28 fichiers), suppression 7 deps inutiles, .gitignore, .env
+  - bcrypt password hashing, Zod validation 4 API routes, DB pool connexion
+  - Design tokens CSS (clamp fluid), tailwind enrichi, Vitest + 4 tests
+  - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
