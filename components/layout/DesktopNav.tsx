@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -33,10 +34,13 @@ export default function DesktopNav() {
         className="flex-shrink-0 flex items-center mr-6"
         aria-label="FakedIndeed — Accueil"
       >
-        <img
+        <Image
           src="/fakedindeed.png"
           alt="FakedIndeed"
+          width={160}
+          height={40}
           className="h-8 lg:h-10 w-auto"
+          priority
         />
       </Link>
 

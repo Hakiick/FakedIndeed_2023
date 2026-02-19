@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -50,7 +51,7 @@ export default function RegisterPage() {
     <div>
       <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50 bg-gray-100 bg-opacity-100">
         <Link className="fixed top-44" href="/">
-          <img className="h-16" src="fakedindeed.png" alt="FakedIndeed" />
+          <Image src="/fakedindeed.png" alt="FakedIndeed" width={160} height={64} className="h-16 w-auto" />
         </Link>
         <div className="bg-white rounded-lg p-4 shadow-lg w-96 flex flex-col justify-between">
           <div>
