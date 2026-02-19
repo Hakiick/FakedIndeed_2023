@@ -9,20 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "axios": "^1.5.1",
     "js-cookie": "^3.0.5",
-    "mongodb": "^6.1.0",
-    "mongoose": "^7.6.1",
-    "mysql": "^2.18.1",
     "mysql2": "^3.6.2",
     "next": "13.5.4",
-    "node-sass": "^9.0.0",
-    "query": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
     "react-places-autocomplete": "^7.3.0",
-    "request": "^2.88.2",
     "tw-elements": "^1.0.0"
   },
   "devDependencies": {
