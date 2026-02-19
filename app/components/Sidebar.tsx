@@ -3,19 +3,14 @@
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { FaBars, FaTimes, FaAngleRight } from 'react-icons/fa';
-import Cookies from 'js-cookie';
-
-interface UserOption {
-  email: string;
-  userType: string;
-}
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [userType, setUserType] = useState<string | null>(null);
+  const { user } = useAuth();
 
-  const email = Cookies.get('CookieUser');
+  const userType = user?.userType ?? null;
 
   const openSidebar = () => {
     setIsOpen(true);
@@ -24,41 +19,6 @@ export default function Sidebar() {
   const closeSidebar = () => {
     setIsOpen(false);
   };
-
-  const getUsers = async (): Promise<UserOption[] | undefined> => {
-    try {
-      const res = await fetch('/api/users', {
-        cache: 'no-store',
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch users');
-      }
-
-      return res.json() as Promise<UserOption[]>;
-    } catch (error) {
-      return undefined;
-    }
-  };
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getUsers();
-        if (data) {
-          const matchingUser = data.find((item) => item.email === email);
-
-          if (matchingUser) {
-            setUserType(matchingUser.userType);
-          }
-        }
-      } catch (error) {
-        // silently handle
-      }
-    };
-
-    fetchUsers();
-  }, [email]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -80,7 +40,7 @@ export default function Sidebar() {
 
   return (
     <div>
-      <button onClick={openSidebar}>
+      <button onClick={openSidebar} aria-label="Open menu">
         <FaBars size={24} />
       </button>
       {isOpen && (
@@ -88,7 +48,7 @@ export default function Sidebar() {
           <div ref={sidebarRef} className="bg-white rounded-lg p-4 shadow-lg w-96 h-3/5 flex flex-col justify-between">
             <div>
               <div className="text-right">
-                <button onClick={closeSidebar} className="close-button">
+                <button onClick={closeSidebar} className="close-button" aria-label="Close menu">
                   <FaTimes size={24} />
                 </button>
               </div>

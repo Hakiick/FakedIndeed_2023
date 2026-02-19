@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 import type { Job } from '@/types/job';
 
 interface EditAdFormProps {
@@ -12,11 +12,6 @@ interface EditAdFormProps {
 interface CompanyOption {
   email: string;
   name: string;
-}
-
-interface UserOption {
-  email: string;
-  userType: string;
 }
 
 interface CompanyData {
@@ -29,21 +24,24 @@ const POSITION_LOCATION_OPTIONS = ['On-Site Work', 'Semi-Remote Work', 'Full-Rem
 type PositionLocationOption = typeof POSITION_LOCATION_OPTIONS[number];
 
 export default function EditAdForm({ ad }: EditAdFormProps) {
-  const email = Cookies.get('CookieUser');
+  const { user } = useAuth();
+  const email = user?.email ?? null;
+  const userType = user?.userType ?? null;
   const [matchingNames, setMatchingNames] = useState<string[]>([]);
-  const [user, setUser] = useState<string | null>(null);
 
   const getUsersOptions = async (): Promise<CompanyOption[] | undefined> => {
     try {
       const res = await fetch('/api/companyOptions', { cache: 'no-store' });
       if (!res.ok) throw new Error('Failed to fetch company options');
       return res.json() as Promise<CompanyOption[]>;
-    } catch (error) {
+    } catch {
       return undefined;
     }
   };
 
   useEffect(() => {
+    if (!email) return;
+
     const fetchUsersOptions = async () => {
       try {
         const data = await getUsersOptions();
@@ -58,7 +56,7 @@ export default function EditAdForm({ ad }: EditAdFormProps) {
             }
           }
         }
-      } catch (error) {
+      } catch {
         // silently handle
       }
     };
@@ -67,26 +65,7 @@ export default function EditAdForm({ ad }: EditAdFormProps) {
   }, [email]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch('/api/users', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch users');
-        const data = await res.json() as UserOption[];
-        const matchingUser = data.find((item) => item.email === email);
-
-        if (matchingUser) {
-          setUser(matchingUser.userType);
-        }
-      } catch (error) {
-        // silently handle
-      }
-    };
-
-    fetchUsers();
-  }, [email]);
-
-  useEffect(() => {
-    if (user === 'admin') {
+    if (userType === 'admin') {
       const fetchCompany = async () => {
         try {
           const res = await fetch('/api/company', { cache: 'no-store' });
@@ -97,14 +76,14 @@ export default function EditAdForm({ ad }: EditAdFormProps) {
             const companyNames = data.map((company) => company.name);
             setMatchingNames(companyNames);
           }
-        } catch (error) {
+        } catch {
           // silently handle
         }
       };
 
       fetchCompany();
     }
-  }, [user]);
+  }, [userType]);
 
   const { id, title, company, location, description, minSalary, maxSalary, positionLocation, advantages } = ad;
 
@@ -157,7 +136,7 @@ export default function EditAdForm({ ad }: EditAdFormProps) {
 
       router.refresh();
       router.push('/');
-    } catch (error) {
+    } catch {
       setIsLoading(false);
     }
   };

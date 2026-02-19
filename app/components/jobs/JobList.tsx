@@ -6,18 +6,13 @@ import RemoveBtn from '../RemoveBtn';
 import { HiPencilAlt } from 'react-icons/hi';
 import { FaMapMarkerAlt, FaMoneyBillAlt, FaBriefcase } from 'react-icons/fa';
 import LearnMoreBtn from '../LearnMoreBtn';
-import Cookies from 'js-cookie';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import type { Job } from '@/types/job';
 
 interface CompanyOption {
   email: string;
   name: string;
-}
-
-interface UserOption {
-  email: string;
-  userType: string;
 }
 
 interface JobListProps {
@@ -59,7 +54,7 @@ const getUsersCompany = async (): Promise<CompanyOption[] | undefined> => {
     }
 
     return res.json() as Promise<CompanyOption[]>;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };
@@ -75,7 +70,7 @@ const getAds = async (): Promise<Job[] | undefined> => {
     }
 
     return res.json() as Promise<Job[]>;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };
@@ -83,8 +78,9 @@ const getAds = async (): Promise<Job[] | undefined> => {
 export default function JobList({ reloadJobComponent, selectedCompany }: JobListProps) {
   const [ads, setAds] = useState<Job[]>([]);
   const pathname = usePathname();
-  const [userType, setUserType] = useState<string | null>(null);
-  const email = Cookies.get('CookieUser');
+  const { user } = useAuth();
+  const email = user?.email ?? null;
+  const userType = user?.userType ?? null;
   const [matchingNames, setMatchingNames] = useState<string[]>([]);
 
   const truncateDescription = (description: string | undefined): string => {
@@ -107,6 +103,8 @@ export default function JobList({ reloadJobComponent, selectedCompany }: JobList
   }, []);
 
   useEffect(() => {
+    if (!email) return;
+
     const fetchUsersCompany = async () => {
       try {
         const data = await getUsersCompany();
@@ -114,38 +112,19 @@ export default function JobList({ reloadJobComponent, selectedCompany }: JobList
           const matchingUsers = data.filter((item) => item.email === email);
 
           if (matchingUsers.length > 0) {
-            const names = matchingUsers.map((user) => user.name).filter(Boolean);
+            const names = matchingUsers.map((u) => u.name).filter(Boolean);
 
             if (names.length > 0) {
               setMatchingNames(names);
             }
           }
         }
-      } catch (error) {
+      } catch {
         // silently handle
       }
     };
 
     fetchUsersCompany();
-  }, [email]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch('/api/users', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch users');
-        const data = await res.json() as UserOption[];
-        const matchingUser = data.find((item) => item.email === email);
-
-        if (matchingUser) {
-          setUserType(matchingUser.userType);
-        }
-      } catch (error) {
-        // silently handle
-      }
-    };
-
-    fetchUsers();
   }, [email]);
 
   return (

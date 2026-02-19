@@ -4,10 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function RegisterPage() {
   const accountOptions: Array<'individual' | 'company'> = ['individual', 'company'];
   const router = useRouter();
+  const { login } = useAuth();
 
   const [userType, setUserType] = useState<'individual' | 'company'>(accountOptions[0]);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,13 +37,12 @@ export default function RegisterPage() {
       });
 
       if (res.ok) {
-        Cookies.set('CookieUser', email ?? '');
-        router.refresh();
+        await login(email ?? '', password);
         router.push('/profile');
       } else {
         throw new Error('Failed to create an user');
       }
-    } catch (error) {
+    } catch {
       setIsLoading(false);
     }
   };

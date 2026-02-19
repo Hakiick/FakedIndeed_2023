@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 import { FaEnvelope, FaGlobe, FaPhone } from 'react-icons/fa';
 import JobList from '../components/jobs/JobList';
 import type { Application } from '@/types/application';
@@ -11,20 +11,16 @@ interface CompanyOption {
   name: string;
 }
 
-interface UserOption {
-  email: string;
-  userType: string;
-}
-
 interface CompanyData {
   id: number;
   name: string;
 }
 
 export default function Applicants() {
-  const email = Cookies.get('CookieUser');
+  const { user } = useAuth();
+  const email = user?.email ?? null;
+  const userType = user?.userType ?? null;
   const [matchingNames, setMatchingNames] = useState<string[]>([]);
-  const [user, setUser] = useState<string | null>(null);
 
   const getUsersOptions = async (): Promise<CompanyOption[] | undefined> => {
     try {
@@ -34,12 +30,14 @@ export default function Applicants() {
 
       if (!res.ok) throw new Error('Failed to fetch company options');
       return res.json() as Promise<CompanyOption[]>;
-    } catch (error) {
+    } catch {
       return undefined;
     }
   };
 
   useEffect(() => {
+    if (!email) return;
+
     const fetchUsersOptions = async () => {
       try {
         const data = await getUsersOptions();
@@ -54,7 +52,7 @@ export default function Applicants() {
             }
           }
         }
-      } catch (error) {
+      } catch {
         // silently handle
       }
     };
@@ -63,26 +61,7 @@ export default function Applicants() {
   }, [email]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch('/api/users', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch users');
-        const data = await res.json() as UserOption[];
-        const matchingUser = data.find((item) => item.email === email);
-
-        if (matchingUser) {
-          setUser(matchingUser.userType);
-        }
-      } catch (error) {
-        // silently handle
-      }
-    };
-
-    fetchUsers();
-  }, [email]);
-
-  useEffect(() => {
-    if (user === 'admin') {
+    if (userType === 'admin') {
       const fetchCompany = async () => {
         try {
           const res = await fetch('/api/company', { cache: 'no-store' });
@@ -93,14 +72,14 @@ export default function Applicants() {
             const companyNames = data.map((company) => company.name);
             setMatchingNames(companyNames);
           }
-        } catch (error) {
+        } catch {
           // silently handle
         }
       };
 
       fetchCompany();
     }
-  }, [user]);
+  }, [userType]);
 
   const [applicants, setApplicants] = useState<Application[]>([]);
 
@@ -112,7 +91,7 @@ export default function Applicants() {
 
       if (!res.ok) throw new Error('Failed to fetch applicants');
       return res.json() as Promise<Application[]>;
-    } catch (error) {
+    } catch {
       return undefined;
     }
   };

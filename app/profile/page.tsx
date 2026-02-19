@@ -2,11 +2,12 @@
 
 import EditProfile from './EditProfile';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 import type { User } from '@/types/user';
 
 export default function ProfilePage() {
-  const email = Cookies.get('CookieUser');
+  const { user: authUser } = useAuth();
+  const email = authUser?.email ?? null;
   const [userType, setUserType] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedEmail, setSelectedEmail] = useState('');
@@ -24,12 +25,14 @@ export default function ProfilePage() {
       }
 
       return res.json() as Promise<User[]>;
-    } catch (error) {
+    } catch {
       return undefined;
     }
   };
 
   useEffect(() => {
+    if (!email) return;
+
     const fetchUsers = async () => {
       try {
         const data = await getUsers();
@@ -46,7 +49,7 @@ export default function ProfilePage() {
             setCompaniesList(usersEmail);
           }
         }
-      } catch (error) {
+      } catch {
         // silently handle
       }
     };
@@ -65,7 +68,7 @@ export default function ProfilePage() {
           setUser(matchingUser);
         }
       }
-    } catch (error) {
+    } catch {
       // silently handle
     }
     setEditProfileKey((prevKey) => prevKey + 1);

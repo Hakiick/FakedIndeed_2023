@@ -3,7 +3,7 @@
 import ApplyForm from './applyFrom';
 import Job from '../components/jobs/Job';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 import type { User } from '@/types/user';
 
 interface ApplyFormUser {
@@ -15,7 +15,8 @@ interface ApplyFormUser {
 }
 
 export default function ApplyJob() {
-  const email = Cookies.get('CookieUser');
+  const { user: authUser } = useAuth();
+  const email = authUser?.email ?? null;
   const [user, setUser] = useState<User | null>(null);
 
   const getUsers = async (): Promise<User[] | undefined> => {
@@ -29,12 +30,14 @@ export default function ApplyJob() {
       }
 
       return res.json() as Promise<User[]>;
-    } catch (error) {
+    } catch {
       return undefined;
     }
   };
 
   useEffect(() => {
+    if (!email) return;
+
     const fetchUsers = async () => {
       try {
         const data = await getUsers();
@@ -45,7 +48,7 @@ export default function ApplyJob() {
             setUser(matchingUser);
           }
         }
-      } catch (error) {
+      } catch {
         // silently handle
       }
     };

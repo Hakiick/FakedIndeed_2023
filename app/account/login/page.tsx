@@ -4,11 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
   const email = Cookies.get('yourEmail');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,22 +18,15 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const success = await login(email ?? '', password);
 
-      if (response.ok) {
-        Cookies.set('CookieUser', email ?? '');
+      if (success) {
         router.push('/');
       } else {
         alert('Wrong password');
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch {
       setIsLoading(false);
     }
   };
