@@ -16,7 +16,7 @@ export default function InstallPrompt() {
       <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-4 flex items-center gap-4">
         <div className="flex-1">
           <p className="text-sm font-semibold text-gray-900">Installer FakedIndeed</p>
-          <p className="text-xs text-gray-500 mt-0.5">Acces rapide depuis votre ecran d'accueil</p>
+          <p className="text-xs text-gray-500 mt-0.5">Acces rapide depuis votre ecran d&apos;accueil</p>
         </div>
         <button
           onClick={install}
