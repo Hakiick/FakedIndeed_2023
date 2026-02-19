@@ -44,6 +44,7 @@ export default function Button({
       className={[
         'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors duration-150',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+        'ripple-effect',
         variantClasses[variant],
         sizeClasses[size],
         isDisabled ? 'opacity-50 cursor-not-allowed' : '',
