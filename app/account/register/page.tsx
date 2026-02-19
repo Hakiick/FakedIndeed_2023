@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function RegisterPage() {
@@ -14,7 +13,7 @@ export default function RegisterPage() {
   const [userType, setUserType] = useState<'individual' | 'company'>(accountOptions[0]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const email = Cookies.get('yourEmail');
+  const email = typeof window !== 'undefined' ? sessionStorage.getItem('yourEmail') : null;
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

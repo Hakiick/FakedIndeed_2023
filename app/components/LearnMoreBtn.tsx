@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
 interface LearnMoreBtnProps {
@@ -10,11 +9,16 @@ interface LearnMoreBtnProps {
   reloadJobComponent: () => void;
 }
 
+function setLastAdViewCookie(id: number): void {
+  const maxAge = Math.round(0.1 * 24 * 60 * 60);
+  document.cookie = `LastAdView=${encodeURIComponent(id)}; max-age=${maxAge}; path=/; SameSite=Lax`;
+}
+
 export default function LearnMoreBtn({ id, reloadJobComponent }: LearnMoreBtnProps) {
   const router = useRouter();
 
   const handleLearnMore = () => {
-    Cookies.set('LastAdView', String(id), { expires: 0.1 });
+    setLastAdViewCookie(id);
     reloadJobComponent();
     router.refresh();
   };

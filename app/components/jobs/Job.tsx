@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { FaMoneyBillAlt, FaBriefcase, FaMapMarkedAlt } from 'react-icons/fa';
-import Cookies from 'js-cookie';
 import ApplyJobBtn from '../ApplyJobBtn';
 import { usePathname } from 'next/navigation';
 import type { Job as JobType } from '@/types/job';
@@ -51,7 +50,8 @@ export default function Job() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const lastAdViewId = Number(Cookies.get('LastAdView'));
+    const cookieMatch = document.cookie.match(/(?:^|; )LastAdView=([^;]*)/);
+    const lastAdViewId = cookieMatch ? Number(decodeURIComponent(cookieMatch[1])) : 0;
 
     getAds().then((data) => {
       if (data) {

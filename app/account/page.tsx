@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 export default function AccountPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +14,7 @@ export default function AccountPage() {
     setIsLoading(true);
     e.preventDefault();
 
-    Cookies.set('yourEmail', email);
+    sessionStorage.setItem('yourEmail', email);
 
     try {
       const response = await fetch('/api/users', {

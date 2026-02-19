@@ -2,8 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 import type { Job } from '@/types/job';
+
+function getCookieValue(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
 
 interface ApplyFormUser {
   email: string | null;
@@ -39,7 +44,7 @@ export default function ApplyForm({ user }: ApplyFormProps) {
   const [ad, setAd] = useState<Job | null | undefined>(undefined);
 
   useEffect(() => {
-    const lastAdViewId = Number(Cookies.get('LastAdView'));
+    const lastAdViewId = Number(getCookieValue('LastAdView'));
 
     getAds().then((data) => {
       if (data) {

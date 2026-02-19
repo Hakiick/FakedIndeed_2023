@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginPage() {
@@ -11,7 +10,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
-  const email = Cookies.get('yourEmail');
+  const email = typeof window !== 'undefined' ? sessionStorage.getItem('yourEmail') : null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

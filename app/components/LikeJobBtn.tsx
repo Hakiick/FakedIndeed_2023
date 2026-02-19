@@ -1,11 +1,10 @@
 'use client';
 
 import { FaThumbsUp } from 'react-icons/fa';
-import Cookies from 'js-cookie';
 
 export default function LikeJobBtn() {
   const handleClick = () => {
-    Cookies.set('access', 'true');
+    document.cookie = 'access=true; path=/; SameSite=Lax';
   };
 
   return (
