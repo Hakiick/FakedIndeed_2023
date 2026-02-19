@@ -7,7 +7,7 @@
 - **Objectif** : Rebuild job board mobile-first sécurisé pour portfolio
 
 ## US Courante
-- **US** : (en attente — prochaine : US-02)
+- **US** : (en attente — prochaine : US-03)
 - **Branche** : —
 - **Statut** : —
 - **Équipe** : —
@@ -28,7 +28,7 @@
 - Monolithe Next.js : frontend + API routes dans le même repo
 - Migration JS → TypeScript strict
 - MySQL via mysql2 : garder, sécuriser les requêtes
-- Auth : NextAuth.js (ou JWT custom sécurisé) — remplacer les cookies simples
+- Auth : JWT custom via jose (httpOnly cookies) — CookieUser supprimé
 - Passwords : bcrypt (remplacer le stockage en clair)
 - Validation : Zod partout (client + serveur)
 - Dépendances inutiles supprimées : mongodb, mongoose, axios, request, query, node-sass
@@ -38,6 +38,7 @@
 ## Journal
 - 2026-02-19 : Init-project — Brainstorm validé, 10 US créées, agents configurés, rules générées
 - 2026-02-19 : US-01 DONE — Migration TS strict, bcrypt, Zod, design tokens, Vitest. 9 commits, 82 fichiers.
+- 2026-02-19 : US-02 DONE — JWT auth, 7 composants UI, 3 hooks, middleware. 12 commits, 37 fichiers.
 
 ## US Terminées
 - **US-01** (2026-02-19) : Setup TypeScript + cleanup + sécurité de base
@@ -45,3 +46,9 @@
   - bcrypt password hashing, Zod validation 4 API routes, DB pool connexion
   - Design tokens CSS (clamp fluid), tailwind enrichi, Vitest + 4 tests
   - Agents : mobile-dev → stabilizer | 0 feedback loops | STABLE
+- **US-02** (2026-02-19) : Auth sécurisée + composants UI de base
+  - JWT auth via jose (httpOnly cookies), login/logout/me routes, middleware protection routes
+  - 7 composants UI : Button, Card, Badge, Input, Modal, Skeleton, Toast (mobile-first)
+  - 3 hooks : useMediaQuery, useBreakpoint, useAuth + AuthProvider
+  - Migration de 10 fichiers de CookieUser → useAuth, suppression js-cookie
+  - Agents : mobile-dev → stabilizer (fix 7 fichiers js-cookie restants) | 1 feedback | STABLE
