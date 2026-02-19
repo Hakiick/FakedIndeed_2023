@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "js-cookie": "^3.0.5",
     "mysql2": "^3.6.2",
     "next": "13.5.4",
@@ -16,12 +17,24 @@
     "react-dom": "^18",
     "react-icons": "^4.11.0",
     "react-places-autocomplete": "^7.3.0",
-    "tw-elements": "^1.0.0"
+    "tw-elements": "^1.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
     "autoprefixer": "^10.4.16",
+    "jsdom": "^28.1.0",
     "postcss": "^8.4.31",
     "sass": "^1.69.1",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }
