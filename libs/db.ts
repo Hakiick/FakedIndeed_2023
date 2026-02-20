@@ -9,6 +9,9 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ...(process.env.MYSQL_SSL === 'true' && {
+    ssl: { rejectUnauthorized: true },
+  }),
 });
 
 export async function query<T>(sql: string, values?: unknown[]): Promise<T> {

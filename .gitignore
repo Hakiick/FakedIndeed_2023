@@ -7,3 +7,9 @@ node_modules/
 .DS_Store
 .forge/
 screenshots/
+
+# Terraform
+terraform/terraform.tfvars
+terraform/*.tfstate*
+terraform/.terraform/
+terraform/.terraform.lock.hcl
